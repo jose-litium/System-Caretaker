@@ -1,4 +1,4 @@
-Sure, here is a GitHub-friendly format for your README file:
+Certainly! Here's the README file in English with the emphasis on installing the script on the `C:\` drive:
 
 ```markdown
 # System Caretaker
@@ -19,7 +19,7 @@ System Caretaker is a PowerShell script designed for system maintenance and opti
 
 - Windows operating system with PowerShell.
 
-### Usage
+### Installation
 
 1. **Clone the repository:**
 
@@ -33,7 +33,13 @@ System Caretaker is a PowerShell script designed for system maintenance and opti
    cd system-caretaker
    ```
 
-3. **Run the script:**
+3. **Ensure script location:**
+
+   Move the `SystemCaretaker.ps1` script to `C:\system-caretaker\`.
+
+### Usage
+
+1. **Run the script:**
 
    Right-click on `SystemCaretaker.ps1` and select `Run with PowerShell`.
 
@@ -94,9 +100,10 @@ José M. Moreno
 ## Contributions
 
 Contributions are welcome. Please submit a pull request or open an issue to discuss your changes.
+```
 
-## Screenshot
+This version of the README emphasizes the need to move the script to `C:\system-caretaker\` for proper functionality across different systems. It provides clear instructions for users to follow to ensure the script runs correctly in their environment.
 
-![image](https://github.com/jose-litium/System-Caretaker/assets/172591425/93ec0173-4160-4707-a198-44bab49d3a88)
+#### screenshot
 
-
+![image](https://github.com/jose-litium/System-Caretaker/assets/172591425/8acd38b1-471e-4eeb-835c-4dc42f42e71e)
