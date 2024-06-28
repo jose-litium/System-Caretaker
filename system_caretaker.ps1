@@ -161,7 +161,7 @@ $buttonPerform.Add_Click({
     }
 
     # Guardar reporte
-    $reportPath = Join-Path -Path (Get-Location) -ChildPath "report.txt"
+    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
@@ -196,7 +196,7 @@ $buttonCloseApps.Add_Click({
     $reportLines += "Close Unnecessary Applications: $result"
 
     # Guardar reporte
-    $reportPath = Join-Path -Path (Get-Location) -ChildPath "report.txt"
+    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
@@ -219,7 +219,7 @@ $buttonAutomateAll.Add_Click({
     $reportLines += $actionsResults
 
     # Guardar reporte
-    $reportPath = Join-Path -Path (Get-Location) -ChildPath "report.txt"
+    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
