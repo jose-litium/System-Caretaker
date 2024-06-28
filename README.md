@@ -105,3 +105,9 @@ This version of the README emphasizes the need to move the script to `C:\system-
 #### screenshot
 
 ![image](https://github.com/jose-litium/System-Caretaker/assets/172591425/bb4be041-b942-4878-b163-52d330bbd5f5)
+
+
+#### Do Not Worry I tested it
+
+![image](https://github.com/jose-litium/System-Caretaker/assets/172591425/51213b51-32f6-41ba-aed6-c3fda0b2c8ef)
+
