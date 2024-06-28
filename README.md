@@ -81,6 +81,7 @@ System Caretaker is a PowerShell script designed for system maintenance and opti
 
 ## Important Notes
 
+- Move the script to `C:\system-caretaker\` otherwise it will not work
 - The script attempts to close unnecessary applications and disable non-essential services, but some applications or services might require administrative privileges.
 - Temporary files that are currently in use might not be deleted.
 - The script generates a `report.txt` file in the same directory, containing the detailed log of all actions performed.
