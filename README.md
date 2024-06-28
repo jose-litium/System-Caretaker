@@ -97,55 +97,6 @@ Contributions are welcome. Please submit a pull request or open an issue to disc
 
 ## Screenshot
 
-![System Caretaker](https://user-images.githubusercontent.com/xxxxxxx/system-caretaker-screenshot.png) *(Replace with actual screenshot URL)*
+![image](https://github.com/jose-litium/System-Caretaker/assets/172591425/93ec0173-4160-4707-a198-44bab49d3a88)
 
----
 
-Feel free to edit the above content to better match your specific setup or preferences.
-
-### Save the README
-
-1. **Create a README file:**
-
-   ```bash
-   touch README.md
-   ```
-
-2. **Copy and paste the above content into `README.md`.**
-
-3. **Save and push to your repository:**
-
-   ```bash
-   git add README.md
-   git commit -m "Add README with detailed instructions"
-   git push origin main
-   ```
-```
-
-You can replace the placeholder screenshot URL with the actual URL of your screenshot if you upload one.
-
-### Adding a License File
-
-To add a license file, create a file named `LICENSE` in the root directory of your repository with the following content:
-
-```text
-MIT License
-
-© 2024 José M. Moreno
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Date: 2024-06-28
-```
-
-After creating the `LICENSE` file, add, commit, and push it to your repository:
-
-```bash
-git add LICENSE
-git commit -m "Add MIT license"
-git push origin main
-```
