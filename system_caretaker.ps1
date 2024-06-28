@@ -1,6 +1,12 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Function to retrieve active processes
+function GetActiveProcesses {
+    $processes = Get-Process | Select-Object -Property Id, ProcessName, CPU, MainWindowTitle
+    return $processes
+}
+
 # Function to flush DNS cache
 function FlushDNS {
     Write-Output "Flushing DNS cache..."
@@ -19,27 +25,12 @@ function CleanTempFiles {
     Write-Output "Cleaning temporary files..."
     $tempFolder = "$env:TEMP"
     $totalDeleted = 0
-    $errorFiles = @()
     try {
-        $files = Get-ChildItem -Path $tempFolder -Recurse -Force -ErrorAction Stop | Where-Object { !$_.PSIsContainer }
-        foreach ($file in $files) {
-            try {
-                $fileSize = (Get-Item $file.FullName).Length
-                Remove-Item -Path $file.FullName -Force -ErrorAction Stop
-                $totalDeleted += $fileSize
-            } catch {
-                $errorFiles += $file.FullName
-            }
-        }
+        $deletedFiles = Get-ChildItem -Path $tempFolder -Recurse -Force -ErrorAction Stop | Where-Object { !$_.PSIsContainer } | Remove-Item -Force -ErrorAction Stop
+        $totalDeleted = $deletedFiles | Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum
         $totalDeletedMB = [math]::Round($totalDeleted / 1MB, 2)
         Write-Output "Temporary files cleaned. Total data deleted: $totalDeletedMB MB."
-        if ($errorFiles.Count -gt 0) {
-            $errorMsg = "Some files could not be deleted: " + ($errorFiles -join ", ")
-            Write-Output $errorMsg
-            return "Temporary files cleaned. Deleted $totalDeletedMB MB. $errorMsg"
-        } else {
-            return "Temporary files cleaned. Deleted $totalDeletedMB MB."
-        }
+        return "Temporary files cleaned. Deleted $totalDeletedMB MB"
     } catch {
         Write-Output "Error cleaning temporary files: $_"
         return "Error cleaning temporary files: $_"
@@ -50,24 +41,22 @@ function CleanTempFiles {
 function DisableServices {
     Write-Output "Disabling non-essential services..."
     $servicesToDisable = @("AdobeARMservice", "Bonjour Service")  # Ejemplos de servicios no esenciales
-    $results = @()
+    $disabledCount = 0
     foreach ($service in $servicesToDisable) {
         try {
             $svc = Get-Service -Name $service -ErrorAction Stop
             $svc | Set-Service -StartupType Disabled -ErrorAction Stop
             Write-Output "Service '$service' disabled."
-            $results += "Service '$service' disabled."
+            $disabledCount++
         } catch {
-            if ($_.Exception.Message -match "No se encuentra ningún servicio") {
-                Write-Output "Service '$service' not found."
-                $results += "Service '$service' not found."
-            } else {
-                Write-Output "Error disabling service '$service': $_"
-                $results += "Error disabling service '$service': $_"
-            }
+            Write-Output "Error disabling service '$service': $_"
         }
     }
-    return $results -join " | "
+    if ($disabledCount -gt 0) {
+        return "Non-essential services disabled"
+    } else {
+        return "No non-essential services disabled"
+    }
 }
 
 # Function to close all unnecessary applications
@@ -181,21 +170,19 @@ $form.Controls.Add($buttonPerform)
 
 # Create a button to close the form
 $buttonClose = New-Object System.Windows.Forms.Button
-$buttonClose.Location = New-Object System.Drawing.Point(750, 600)  # Ajuste hacia abajo para centrar mejor con la altura del formulario
+$buttonClose.Location = New-Object System.Drawing.Point(200, 600)  # Ajuste hacia abajo para centrar mejor con la altura del formulario
 $buttonClose.Size = New-Object System.Drawing.Size(100, 30)
 $buttonClose.Text = "Close"
 $buttonClose.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
 $buttonClose.BackColor = [System.Drawing.Color]::FromArgb(220, 53, 69)
 $buttonClose.ForeColor = [System.Drawing.Color]::White
 $buttonClose.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$buttonClose.Add_Click({
-    $form.Close()
-})
+$buttonClose.Add_Click({ $form.Close() })
 $form.Controls.Add($buttonClose)
 
 # Create a button to close unnecessary applications
 $buttonCloseApps = New-Object System.Windows.Forms.Button
-$buttonCloseApps.Location = New-Object System.Drawing.Point(300, 600)  # Ajuste hacia abajo para centrar mejor con la altura del formulario
+$buttonCloseApps.Location = New-Object System.Drawing.Point(350, 600)  # Ajuste hacia abajo para centrar mejor con la altura del formulario
 $buttonCloseApps.Size = New-Object System.Drawing.Size(180, 30)
 $buttonCloseApps.Text = "Close Unnecessary Apps"
 $buttonCloseApps.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
