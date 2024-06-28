@@ -1,6 +1,3 @@
-Certainly! Here's the README file in English with the emphasis on installing the script on the `C:\` drive:
-
-```markdown
 # System Caretaker
 
 System Caretaker is a PowerShell script designed for system maintenance and optimization tasks.
