@@ -103,6 +103,7 @@ Contributions are welcome. Please submit a pull request or open an issue to disc
 ```
 
 This version of the README emphasizes the need to move the script to `C:\system-caretaker\` for proper functionality across different systems. It provides clear instructions for users to follow to ensure the script runs correctly in their environment.
+```
 
 #### screenshot
 
