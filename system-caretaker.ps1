@@ -14,9 +14,12 @@ function FlushDNS {
     if ($flushResult -match "Se vació correctamente la caché de resolución de DNS") {
         Write-Output "DNS cache flushed successfully."
         return "DNS cache flushed successfully."
-    } else {
+    } elseif ($flushResult -match "Error") {
         Write-Output "Error flushing DNS cache: $flushResult"
         return "Error flushing DNS cache: $flushResult"
+    } else {
+        Write-Output "Unexpected result: $flushResult"
+        return "Unexpected result: $flushResult"
     }
 }
 
@@ -25,12 +28,21 @@ function CleanTempFiles {
     Write-Output "Cleaning temporary files..."
     $tempFolder = "$env:TEMP"
     $totalDeleted = 0
+    $errors = 0
     try {
-        $deletedFiles = Get-ChildItem -Path $tempFolder -Recurse -Force -ErrorAction Stop | Where-Object { !$_.PSIsContainer } | Remove-Item -Force -ErrorAction Stop
-        $totalDeleted = $deletedFiles | Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum
+        $files = Get-ChildItem -Path $tempFolder -Recurse -Force -ErrorAction Stop | Where-Object { !$_.PSIsContainer }
+        foreach ($file in $files) {
+            try {
+                Remove-Item -Path $file.FullName -Force -ErrorAction Stop
+                $totalDeleted += $file.Length
+            } catch {
+                Write-Output "Cannot delete temporary file: $($file.FullName). It is being used by another process."
+                $errors++
+            }
+        }
         $totalDeletedMB = [math]::Round($totalDeleted / 1MB, 2)
         Write-Output "Temporary files cleaned. Total data deleted: $totalDeletedMB MB."
-        return "Temporary files cleaned. Deleted $totalDeletedMB MB"
+        return "Temporary files cleaned. Deleted $totalDeletedMB MB with $errors errors."
     } catch {
         Write-Output "Error cleaning temporary files: $_"
         return "Error cleaning temporary files: $_"
@@ -49,13 +61,13 @@ function DisableServices {
             Write-Output "Service '$service' disabled."
             $disabledCount++
         } catch {
-            Write-Output "Error disabling service '$service': $_"
+            Write-Output "Cannot disable service '$service': $_"
         }
     }
     if ($disabledCount -gt 0) {
-        return "Non-essential services disabled"
+        return "Non-essential services disabled."
     } else {
-        return "No non-essential services disabled"
+        return "No non-essential services disabled."
     }
 }
 
@@ -69,7 +81,7 @@ function CloseUnnecessaryApplications {
         $process | Stop-Process -Force -ErrorAction SilentlyContinue
     }
     Write-Output "Unnecessary applications closed."
-    return "Unnecessary applications closed"
+    return "Unnecessary applications closed."
 }
 
 # Function to automate all actions
@@ -161,7 +173,7 @@ $buttonPerform.Add_Click({
     }
 
     # Guardar reporte
-    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
+    $reportPath = Join-Path -Path $PSScriptRoot -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
@@ -174,10 +186,12 @@ $buttonClose.Location = New-Object System.Drawing.Point(200, 600)  # Ajuste haci
 $buttonClose.Size = New-Object System.Drawing.Size(100, 30)
 $buttonClose.Text = "Close"
 $buttonClose.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-$buttonClose.BackColor = [System.Drawing.Color]::FromArgb(220, 53, 69)
+$buttonClose.BackColor = [System.Drawing.Color]::FromArgb(192, 0, 0)
 $buttonClose.ForeColor = [System.Drawing.Color]::White
 $buttonClose.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$buttonClose.Add_Click({ $form.Close() })
+$buttonClose.Add_Click({
+    $form.Close()
+})
 $form.Controls.Add($buttonClose)
 
 # Create a button to close unnecessary applications
@@ -196,7 +210,7 @@ $buttonCloseApps.Add_Click({
     $reportLines += "Close Unnecessary Applications: $result"
 
     # Guardar reporte
-    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
+    $reportPath = Join-Path -Path $PSScriptRoot -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
@@ -219,7 +233,7 @@ $buttonAutomateAll.Add_Click({
     $reportLines += $actionsResults
 
     # Guardar reporte
-    $reportPath = Join-Path -Path "C:\" -ChildPath "report.txt"
+    $reportPath = Join-Path -Path $PSScriptRoot -ChildPath "report.txt"
     $reportLines | Out-File -FilePath $reportPath -Encoding UTF8
 
     $listBoxResults.Items.Add("Actions completed. Report saved to $reportPath.")
